@@ -1,40 +1,55 @@
 package me.dbogda.employee_book.model;
 
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
+@Entity
+@Table(name = "city")
 public class City {
-    private int city_id;
-    private String city_name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "city_id")
+    private int id;
 
-    public City(String city_name) {
-        this.city_name = city_name;
-    }
+    @Column(name = "city_name", nullable = false)
+    private String name;
 
-    public City(int city_id) {
-        this.city_id = city_id;
-    }
-
-    public City(int city_id, String city_name) {
-        this.city_id = city_id;
-        this.city_name = city_name;
-    }
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Employee> employeeList;
 
     public City() {
     }
-
-    public int getCity_id() {
-        return city_id;
+    public City(String name) {
+        this.name = name;
     }
 
-    public void setCity_id(int city_id) {
-        this.city_id = city_id;
+    public City(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public String getCity_name() {
-        return city_name;
+    public int getId() {
+        return id;
     }
 
-    public void setCity_name(String city_name) {
-        this.city_name = city_name;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
     }
 
     @Override
@@ -42,16 +57,16 @@ public class City {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         City city = (City) o;
-        return city_id == city.city_id && Objects.equals(city_name, city.city_name);
+        return id == city.id && Objects.equals(name, city.name) && Objects.equals(employeeList, city.employeeList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(city_id, city_name);
+        return Objects.hash(id, name, employeeList);
     }
 
     @Override
     public String toString() {
-        return  city_id + ". " + city_name;
+        return  id + ". " + name;
     }
 }

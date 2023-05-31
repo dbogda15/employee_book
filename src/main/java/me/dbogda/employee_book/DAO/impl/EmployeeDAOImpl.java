@@ -1,6 +1,7 @@
 package me.dbogda.employee_book.DAO.impl;
 
 import me.dbogda.employee_book.DAO.EmployeeDAO;
+import me.dbogda.employee_book.model.City;
 import me.dbogda.employee_book.model.Employee;
 import me.dbogda.employee_book.utils.HibernateSessionFactoryUtils;
 import org.hibernate.Session;
@@ -32,12 +33,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public List<Employee> getAllEmployee() {
         Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
         try(session) {
-            return session.createQuery("FROM Employee").list();
+            return session.createQuery("from Employee").list();
         }
     }
 
     @Override
-    public void updateEmployeeById(int id, Employee employee) {
+    public void updateEmployee(Employee employee) {
         Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
         try (session){
             Transaction transaction = session.beginTransaction();
@@ -47,11 +48,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void deleteEmployeeById(int id) {
+    public void deleteEmployee(Employee employee) {
         Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
         try (session){
             Transaction transaction = session.beginTransaction();
-            Employee employee = getEmployeeById(id);
             session.delete(employee);
             transaction.commit();
         }

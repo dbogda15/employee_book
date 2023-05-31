@@ -1,5 +1,6 @@
 package me.dbogda.employee_book.utils;
 
+import me.dbogda.employee_book.model.City;
 import me.dbogda.employee_book.model.Employee;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -16,6 +17,7 @@ public class HibernateSessionFactoryUtils {
             try {
                 Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
                 configuration.addAnnotatedClass(Employee.class);
+                configuration.addAnnotatedClass(City.class);
                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception e) {

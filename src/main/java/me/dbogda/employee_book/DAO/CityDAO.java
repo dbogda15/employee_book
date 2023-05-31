@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CityDAO {
     void create(City city);
-    void deleteById(int id);
+    City getCityById(int id);
     List<City> getAllCity();
+    void updateCity(City city);
+    void deleteCity(City city);
 }

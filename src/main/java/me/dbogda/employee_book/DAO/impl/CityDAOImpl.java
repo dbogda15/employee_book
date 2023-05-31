@@ -2,59 +2,55 @@ package me.dbogda.employee_book.DAO.impl;
 
 import me.dbogda.employee_book.DAO.CityDAO;
 import me.dbogda.employee_book.model.City;
+import me.dbogda.employee_book.utils.HibernateSessionFactoryUtils;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CityDAOImpl implements CityDAO {
-    private final Connection connection;
-
-    public CityDAOImpl(Connection connection) {
-        this.connection = connection;
-    }
-
     @Override
     public void create(City city) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO city (city_name) VALUES ((?))")) {
-            statement.setString(1,city.getCity_name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
+        try (session) {
+            Transaction transaction = session.beginTransaction();
+            session.save(city);
+            transaction.commit();
         }
     }
-
-    @Override
-    public void deleteById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM city WHERE city_id = (?)")) {
-            statement.setInt(1,id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        @Override
+        public City getCityById(int id) {
+            Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
+            try (session){
+                return session.get(City.class, id);
+            }
         }
-    }
 
     @Override
     public List<City> getAllCity() {
-        List<City> list = new ArrayList<>();
-
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM city")) {
-
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("city_id");
-                String city_name = resultSet.getString("city_name");
-
-                list.add(new City(id, city_name));
-            }
+        Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
+        try (session){
+            return session.createQuery("from City").list();
         }
-        catch (SQLException e) {
-            e.printStackTrace();
+    }
+
+    @Override
+    public void updateCity(City city) {
+        Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
+        try (session){
+            Transaction transaction = session.beginTransaction();
+            session.update(city);
+            transaction.commit();
         }
-        return list;
+    }
+
+    @Override
+    public void deleteCity(City city) {
+        Session session = HibernateSessionFactoryUtils.getSessionFactory().openSession();
+        try (session){
+            Transaction transaction = session.beginTransaction();
+            session.delete(city);
+            transaction.commit();
+        }
     }
 }

@@ -6,35 +6,37 @@ import java.util.Objects;
 @Entity
 @Table(name = "employee")
 public class Employee {
-
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
-
-    private String first_name;
-    private String last_name;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
     private String gender;
     private int age;
-    private Integer city_id;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
     public Employee(){
     }
 
-    public Employee(String first_name, String last_name, String gender, int age, Integer city_id) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public Employee(String firstName, String lastName, String gender, int age, City city) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.city_id = city_id;
+        this.city = city;
     }
 
-    public Employee(int id, String first_name, String last_name, String gender, int age, Integer city_id) {
+    public Employee(int id, String firstName, String lastName, String gender, int age, City city) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
         this.age = age;
-        this.city_id = city_id;
+        this.city = city;
     }
 
     public int getId() {
@@ -45,20 +47,20 @@ public class Employee {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getGender() {
@@ -77,12 +79,12 @@ public class Employee {
         this.age = age;
     }
 
-    public Integer getCity_id() {
-        return city_id;
+    public City getCity() {
+        return city;
     }
 
-    public void setCity_id(Integer city_id) {
-        this.city_id = city_id;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override
@@ -90,17 +92,17 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id && age == employee.age && Objects.equals(first_name, employee.first_name) && Objects.equals(last_name, employee.last_name) && Objects.equals(gender, employee.gender) && Objects.equals(city_id, employee.city_id);
+        return id == employee.id && age == employee.age && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(gender, employee.gender) && Objects.equals(city, employee.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, first_name, last_name, gender, age, city_id);
+        return Objects.hash(id, firstName, lastName, gender, age, city);
     }
 
     @Override
     public String toString() {
-        return getId() + ". " + getFirst_name() + " " +  getLast_name() +
-                ", gender: " + getGender() + ", age = " + getAge() + ", city id: " + getCity_id();
+        return getId() + ". " + getFirstName() + " " +  getLastName() +
+                ", gender: " + getGender() + ", age = " + getAge() + ", city: " + getCity().getName();
     }
 }
